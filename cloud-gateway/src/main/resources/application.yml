@@ -1,0 +1,49 @@
+#spring:
+#  application:
+#    name: GATEWAY-SERVICE
+#    cloud:
+#      gateway:
+#        routes:
+#         - id: book-service
+#           uri: lb://BOOK-SERVICE
+#           predicates:
+#             - Path=/api/books/**
+#           filters:
+#             - name: CircuitBreaker
+#               args: book-service
+#               fallbackuri: forward:/bookServiceFallBack
+#
+#         - id: subscription-service
+#           uri: lb://SUBSCRIPTION-SERVICE
+#           predicates:
+#              - Path=/api/subscriptions/**
+#           filters:
+#              - name: CircuitBreaker
+#                args: subscription-service
+#                fallbackuri: forward:/subscriptionServiceFallBack"
+#
+#
+#server:
+#  port: 9090
+#
+#eureka:
+#  instance:
+#    hostname: localhost
+#  client:
+#    register-with-eureka: true
+#    fetch-registry: true
+#    service-url:
+#      defaultZone: http://localhost:8761/eureka/
+
+#management:
+#  endpoints:
+#    web:
+#      exposure:
+#        include: hystrix.stream
+#hystrix:
+#  command:
+#    fallbackcmd:
+#      execution:
+#        isolation:
+#          thread:
+#            timeoutInMilliseconds: 5000
