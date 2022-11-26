@@ -1,0 +1,10 @@
+package in.yesh.subscriptionservice.repositories;
+
+import in.yesh.subscriptionservice.entities.Subscription;
+import org.springframework.data.jpa.repository.JpaRepository;
+
+import java.util.List;
+
+public interface SubscriptionRepository extends JpaRepository<Subscription,Long> {
+    List<Subscription> findByName(String name);
+}
