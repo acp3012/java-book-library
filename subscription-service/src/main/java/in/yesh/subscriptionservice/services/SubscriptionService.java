@@ -6,6 +6,7 @@ import in.yesh.subscriptionservice.dtos.SubscriptionRequest;
 import in.yesh.subscriptionservice.dtos.SubscriptionResponse;
 import in.yesh.subscriptionservice.entities.Subscription;
 import in.yesh.subscriptionservice.repositories.SubscriptionRepository;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
@@ -42,6 +43,7 @@ public class SubscriptionService implements SubscriptionServiceable  {
         // http://localhost:8081/api/books/B1212/issues
         IssueResponse  issueResponse =
                 restTemplate.postForObject(url,issueRequest,IssueResponse.class);
+
         return saveSubscription(issueResponse);
     }
 
@@ -60,6 +62,7 @@ public class SubscriptionService implements SubscriptionServiceable  {
                 .collect(Collectors.toList());
     }
 
+    // private methods
     private SubscriptionResponse mapToSubscriptionRequest(Subscription subscription) {
        return SubscriptionResponse.builder()
                 .id(subscription.getId())
@@ -77,6 +80,7 @@ public class SubscriptionService implements SubscriptionServiceable  {
                 .dateSubscribed(issueResponse.getDateIssued())
                 .build();
     }
+
     private SubscriptionResponse saveSubscription(IssueResponse issueResponse){
         assert issueResponse != null;
         Subscription subscription = mapToSubscription(issueResponse);
