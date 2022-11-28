@@ -22,6 +22,11 @@ public class GlobalErrorHandler extends ResponseEntityExceptionHandler {
                                                                 WebRequest request){
         return sendResponse(ex);
     }
+    @ExceptionHandler(ResourceAlreadyExists.class)
+    public ResponseEntity<ErrorDetail> notFoundExceptionHandler(ResourceAlreadyExists ex,
+                                                                WebRequest request){
+        return sendResponse(ex);
+    }
     @ExceptionHandler(Exception.class)
     public ResponseEntity<ErrorDetail> handleGlobalException(Exception ex){
         return sendResponse(ex);
@@ -43,13 +48,17 @@ public class GlobalErrorHandler extends ResponseEntityExceptionHandler {
     // global exception
 
     private ResponseEntity<ErrorDetail> sendResponse(Exception ex){
-        //ResponseEntity<ErrorDetail> responseEntity = new ResponseEntity<ErrorDetail>();
+
         ErrorDetail errorDetail = new ErrorDetail();
         HttpStatus status = HttpStatus.INTERNAL_SERVER_ERROR;
 
         if(ex instanceof NotFoundException){
             errorDetail = ((NotFoundException) ex).getErrorDetail();
             status = HttpStatus.NOT_FOUND;
+        }
+        else if(ex instanceof ResourceAlreadyExists){
+            errorDetail = ((ResourceAlreadyExists) ex).getErrorDetail();
+            status = HttpStatus.CONFLICT;
         }
 
         else {

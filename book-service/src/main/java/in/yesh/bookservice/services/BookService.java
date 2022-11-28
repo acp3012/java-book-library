@@ -4,6 +4,7 @@ import in.yesh.bookservice.dtos.BookRequest;
 import in.yesh.bookservice.dtos.BookResponse;
 import in.yesh.bookservice.entities.Book;
 import in.yesh.bookservice.exceptions.NotFoundException;
+import in.yesh.bookservice.exceptions.ResourceAlreadyExists;
 import in.yesh.bookservice.repositories.BookRepository;
 import lombok.Data;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -38,6 +39,10 @@ public class BookService implements BookServiceable {
 
     @Override
     public String createBook(BookRequest bookRequest) {
+        if(bookRepository.findById(bookRequest.getBookId()).isPresent()){
+            throw new ResourceAlreadyExists(bookRequest.getBookId());
+        }
+
         Book book = mapToBook(bookRequest);
         Book newBook = bookRepository.save(book);
         return newBook.getBookId();
@@ -56,6 +61,7 @@ public class BookService implements BookServiceable {
        return status;
     }
 
+    // Private methods
     private BookResponse mapToBookResponse(Book book) {
         return BookResponse.builder()
                 .bookId(book.getBookId())
