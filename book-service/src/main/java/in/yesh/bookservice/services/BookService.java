@@ -8,9 +8,7 @@ import in.yesh.bookservice.repositories.BookRepository;
 import lombok.Data;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
 import java.util.List;
-import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.stream.Collectors;
 
 @Data
@@ -27,7 +25,7 @@ public class BookService implements BookServiceable {
     public BookResponse getBookById(String bookId) {
         Book book =  bookRepository
                 .findById(bookId)
-                .orElseThrow(NotFoundException::new);
+                .orElseThrow(()-> new NotFoundException("bookId"));
         return mapToBookResponse(book);
     }
 
@@ -49,7 +47,7 @@ public class BookService implements BookServiceable {
     @Override
     public boolean issueBook(String bookId) {
        boolean status = false;
-       Book book = bookRepository.findById(bookId).orElseThrow(NotFoundException::new);
+       Book book = bookRepository.findById(bookId).orElseThrow(()-> new NotFoundException("bookId"));
        if(book.getAvailableCopies() > 0){
            book.setAvailableCopies(book.getAvailableCopies() - 1);
            bookRepository.save(book);

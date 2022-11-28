@@ -11,9 +11,7 @@ public class NotFoundException extends RuntimeException {
     private static final String DEFAULT_ERROR_MESSAGE = "Resource does not exists.";
     private static final int DEFAULT_ERROR_CODE = 404;
     private final ErrorDetail errorDetail;
-    public NotFoundException(){
-        this(null);
-    }
+
     public NotFoundException(@Nullable String field){
         this(DEFAULT_ERROR_MESSAGE, field);
     }
